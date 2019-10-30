@@ -123,7 +123,7 @@ while True:
                 virtual_batches = response_json['data']['virtual_batches']
                 for batch in virtual_batches:
                     price = Decimal(sub(r'[^\d.]', '', batch['earnings']['batch_payment']))
-                    if price > settings['MINIMUM_PRICE']:
+                    if price >= settings['MINIMUM_PRICE']:
                         if 'uuid' in batch:
                             accept_batch(batch['uuid'])
             except:
