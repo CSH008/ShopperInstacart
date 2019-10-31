@@ -3,11 +3,13 @@ import datetime
 import uuid
 from decimal import Decimal
 from re import sub
-from time import sleep
+from send_sms import *
+
 
 import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 Token_url = 'https://shopper-api.instacart.com/oauth/token.json'
 RegisteringDevice_url = 'https://shopper-api.instacart.com/shopper_devices.json'
@@ -88,7 +90,7 @@ def login():
     return expires
 
 
-def accept_batch(batch_uuid):
+def accept_batch(batch_uuid, batch_accept):
     print("5 Post " + Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true")
     response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches)
     if response_accept.status_code == 200:
@@ -97,11 +99,13 @@ def accept_batch(batch_uuid):
         batches_accept_file = open('batches.txt', 'a')
         batches_accept_file.write(str(datetime.datetime.now()) + " " + batch_uuid + " is accepted\n")
         batches_accept_file.close()
+        send_sms(settings['PHONE'], batch_accept)
     else:
         print("%d: %s" % (response_accept.status_code, response_accept.reason))
 
 
 expires_in = login()
+expires_in = expires_in - 2000
 header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
 i = 0
 now = datetime.datetime.now()
@@ -123,18 +127,22 @@ while True:
                 virtual_batches = response_json['data']['virtual_batches']
                 for batch in virtual_batches:
                     price = Decimal(sub(r'[^\d.]', '', batch['earnings']['batch_payment']))
-                    if price >= settings['MINIMUM_PRICE']:
+                    if price > settings['MINIMUM_PRICE']:
                         if 'uuid' in batch:
-                            accept_batch(batch['uuid'])
+                            accept_batch(batch['uuid'], batch)
             except:
                 print("no json")
         else:
             print("%d: %s" % (response_batches.status_code, response_batches.reason))
+            # if someone login by apk, close script
+            if response_batches.status_code == 401:
+                break
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
         if (settings['REQUEST_PAUSE_TIME'] != 0) and (settings['REQUEST_PAUSE_TIME'] < difference_seconds):
             break
+        # if token is expired, then relogin
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
             login()
     except:
