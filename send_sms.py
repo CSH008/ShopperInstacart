@@ -38,7 +38,7 @@ def send_sms(phone, batch):
     #     return
 
     # print("sms token " + access_token)
-    header_sms['Content-Type'] = 'application/json'
+    # header_sms['Content-Type'] = 'application/json'
     header_sms['Authorization'] = 'Bearer OwQuiPLDlJxmrGUPhWrATWRhN425o3yK'
     data_for_sending_sms = [
         ('message', message),
