@@ -126,10 +126,14 @@ while True:
                 response_json = json.loads(response_batches.text)
                 virtual_batches = response_json['data']['virtual_batches']
                 for batch in virtual_batches:
-                    price = Decimal(sub(r'[^\d.]', '', batch['earnings']['batch_payment']))
-                    if price > settings['MINIMUM_PRICE']:
-                        if 'uuid' in batch:
-                            accept_batch(batch['uuid'], batch)
+                    batch_type = batch['batch_type']
+                    zone_id = batch['zone_id']
+                    if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and (batch_type == 'delivery_only')):
+                        if settings['ZONE'] == zone_id:
+                            price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
+                            if price > settings['MINIMUM_PRICE']:
+                                if 'uuid' in batch:
+                                    accept_batch(batch['uuid'], batch)
             except:
                 print("no json")
         else:
