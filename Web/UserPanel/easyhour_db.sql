@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2019 at 09:31 PM
+-- Generation Time: Nov 07, 2019 at 03:38 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -78,9 +78,9 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phonenumber` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phonenumber` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_running` int(2) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `phonenumber`, `password`, `remember_token`, `is_running`, `created_at`, `updated_at`) VALUES
-(1, 'Rabbit', '7868179221', '$2y$10$/31YWQ6dOCH676/KVvUzH.vIVY9jIpnpMH7R4QcMbatRAgIKt5V..', 'BmS4ITuYV7h95kCBZMzF73C2NSdCQcfdc3dAcabmcI3YlPDowa79wkmZgmUY', 1, NULL, '2019-11-06 12:30:31'),
+(1, 'Rabbit', '7868179221', '$2y$10$/31YWQ6dOCH676/KVvUzH.vIVY9jIpnpMH7R4QcMbatRAgIKt5V..', 'BmS4ITuYV7h95kCBZMzF73C2NSdCQcfdc3dAcabmcI3YlPDowa79wkmZgmUY', 0, NULL, '2019-11-06 12:30:31'),
 (4, 'suju1', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', NULL, 0, '2019-11-05 17:56:07', '2019-11-06 04:52:17'),
 (5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', NULL, 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54');
 
@@ -123,7 +123,7 @@ ALTER TABLE `password_resets`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`phonenumber`);
+  ADD UNIQUE KEY `phonenumber_unique` (`phonenumber`);
 
 --
 -- AUTO_INCREMENT for dumped tables
