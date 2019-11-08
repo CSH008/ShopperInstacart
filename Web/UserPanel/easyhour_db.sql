@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 07, 2019 at 03:38 AM
+-- Generation Time: Nov 08, 2019 at 03:44 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -78,11 +78,16 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phonenumber` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phonenumber` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_running` int(2) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL,
+  `subscription_expired` tinyint(1) NOT NULL,
+  `subscription_started_date` datetime NOT NULL,
+  `paid_amount` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -91,10 +96,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `phonenumber`, `password`, `remember_token`, `is_running`, `created_at`, `updated_at`) VALUES
-(1, 'Rabbit', '7868179221', '$2y$10$/31YWQ6dOCH676/KVvUzH.vIVY9jIpnpMH7R4QcMbatRAgIKt5V..', 'BmS4ITuYV7h95kCBZMzF73C2NSdCQcfdc3dAcabmcI3YlPDowa79wkmZgmUY', 0, NULL, '2019-11-06 12:30:31'),
-(4, 'suju1', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', NULL, 0, '2019-11-05 17:56:07', '2019-11-06 04:52:17'),
-(5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', NULL, 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54');
+INSERT INTO `users` (`id`, `name`, `phonenumber`, `password`, `location`, `remember_token`, `is_running`, `active`, `subscription_expired`, `subscription_started_date`, `paid_amount`, `created_at`, `updated_at`) VALUES
+(1, 'Rabbit', '7868179221', '$2y$10$/31YWQ6dOCH676/KVvUzH.vIVY9jIpnpMH7R4QcMbatRAgIKt5V..', '', 'Oil4HlePduLJhwwz20mkmTrcHjNmClpU01fgsySeOHXS8huw7w35O5MJMFjL', 0, 0, 0, '0000-00-00 00:00:00', 50, '2019-11-06 12:30:31', '2019-11-07 15:31:15'),
+(4, 'suju1', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', '', NULL, 0, 0, 0, '0000-00-00 00:00:00', 0, '2019-11-05 17:56:07', '2019-11-06 04:52:17'),
+(5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', '', NULL, 0, 0, 0, '0000-00-00 00:00:00', 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54');
 
 --
 -- Indexes for dumped tables
