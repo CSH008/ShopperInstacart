@@ -18,16 +18,9 @@ Batches_url = 'https://shopper-api.instacart.com/driver/virtual_batches'
 
 settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
-
+header = json.load(open("header.json"))
 
 def login():
-    header = {
-        "Accept": "application/json;version=3",
-        "x-client-identifier": "Android",
-        "x-client-os": "android",
-        "x-client-version": "4.150.6",
-        "User-Agent": "Instacart Shopper 4.150.6 (store), (Android 7.1.2) (SM-G935F)"
-    };
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
     # 1. Auth login to get Token
@@ -127,27 +120,28 @@ while True:
             print('Batches Success!')
             print(response_batches.text)
             try:
-                batches_file = open('batches.txt', 'a')
-                batches_file.write(str(datetime.datetime.now())+" "+response_batches.text+"\n")
-                batches_file.close()
                 response_json = json.loads(response_batches.text)
                 virtual_batches = response_json['data']['virtual_batches']
-                for batch in virtual_batches:
-                    batch_type = batch['batch_type']
-                    zone_id = batch['zone_id']
-                    if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and (batch_type == 'delivery_only')):
-                        if settings['ZONE'] == zone_id:
-                            price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
-                            if price > settings['MINIMUM_PRICE']:
-                                if 'uuid' in batch:
-                                    accept_batch(batch['uuid'], batch)
+                if len(virtual_batches) > 0:
+                    batches_file = open('batches.txt', 'a')
+                    batches_file.write(str(datetime.datetime.now()) + " " + response_batches.text + "\n")
+                    batches_file.close()
+                    for batch in virtual_batches:
+                        batch_type = batch['batch_type']
+                        zone_id = batch['zone_id']
+                        if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and ((batch_type == 'delivery_only') or (batch_type == 'delivery'))):
+                            if settings['ZONE'] == zone_id:
+                                price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
+                                if price > settings['MINIMUM_PRICE']:
+                                    if 'uuid' in batch:
+                                        accept_batch(batch['uuid'], batch)
             except:
                 print("no json")
         else:
             print("%d: %s" % (response_batches.status_code, response_batches.reason))
             # if someone login by apk, close script
-            if response_batches.status_code == 401:
-                break
+            # if response_batches.status_code == 401:
+            #     break
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
