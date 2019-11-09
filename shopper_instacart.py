@@ -21,6 +21,13 @@ header_batches = json.load(open("header_batches.json"))
 
 
 def login():
+    header = {
+        "Accept": "application/json;version=3",
+        "x-client-identifier": "Android",
+        "x-client-os": "android",
+        "x-client-version": "4.150.6",
+        "User-Agent": "Instacart Shopper 4.150.6 (store), (Android 7.1.2) (SM-G935F)"
+    };
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
     # 1. Auth login to get Token
@@ -34,7 +41,7 @@ def login():
         ('username', settings['PHONE'])
     ]
     print("1. Post " + Token_url)
-    response = requests.post(Token_url, data=data_for_token)
+    response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
         print(response.text)
@@ -96,7 +103,7 @@ def accept_batch(batch_uuid, batch_accept):
     if response_accept.status_code == 200:
         print('Batches Accept Success!')
         print(response_accept.text)
-        batches_accept_file = open('batches.txt', 'a')
+        batches_accept_file = open('batches_accepted.txt', 'a')
         batches_accept_file.write(str(datetime.datetime.now()) + " " + batch_uuid + " is accepted\n")
         batches_accept_file.close()
         send_sms(settings['PHONE'], batch_accept)
