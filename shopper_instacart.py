@@ -1,5 +1,5 @@
 import json
-import datetime
+import time
 import uuid
 from decimal import Decimal
 from re import sub
@@ -117,12 +117,12 @@ while True:
         print("4 Get "+Batches_url)
         response_batches = requests.get(Batches_url, headers=header_batches)
         if response_batches.status_code == 200:
-            print('Batches Success!')
-            print(response_batches.text)
             try:
                 response_json = json.loads(response_batches.text)
                 virtual_batches = response_json['data']['virtual_batches']
                 if len(virtual_batches) > 0:
+                    print('Batches Success!')
+                    print(response_batches.text)
                     batches_file = open('batches.txt', 'a')
                     batches_file.write(str(datetime.datetime.now()) + " " + response_batches.text + "\n")
                     batches_file.close()
@@ -135,6 +135,9 @@ while True:
                                 if price > settings['MINIMUM_PRICE']:
                                     if 'uuid' in batch:
                                         accept_batch(batch['uuid'], batch)
+                else:
+                    login()
+                    continue
             except:
                 print("no json")
         else:
@@ -145,10 +148,11 @@ while True:
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
-        if (settings['REQUEST_PAUSE_TIME'] != 0) and (settings['REQUEST_PAUSE_TIME'] < difference_seconds):
-            break
+        # if (settings['REQUEST_PAUSE_TIME'] != 0) and (settings['REQUEST_PAUSE_TIME'] < difference_seconds):
+        #     break
         # if token is expired, then relogin
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
             login()
+        time.sleep(settings['REQUEST_PAUSE_TIME'])
     except:
         login()
