@@ -136,7 +136,7 @@ while True:
                                     if 'uuid' in batch:
                                         accept_batch(batch['uuid'], batch)
                 else:
-                    login()
+                    # login()
                     continue
             except:
                 print("no json")
