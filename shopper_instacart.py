@@ -20,6 +20,7 @@ settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
 header = json.load(open("header.json"))
 
+
 def login():
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
@@ -96,8 +97,14 @@ def accept_batch(batch_uuid, batch_accept):
     if response_accept.status_code == 200:
         print('Batches Accept Success!')
         print(response_accept.text)
+
+        now1 = datetime.datetime.now()
+        my_date = datetime.datetime.strptime(str(now1.hour) + ":" + str(now1.minute), "%H:%M")
+        message = now1.strftime('%d/%m/%y') + " - " + my_date.strftime("%I:%M %p") + " - Batch paid for " + batch_accept['earnings']['estimate'] + \
+                  ",at " + batch_accept['warehouse']['name'] + " located in " + batch_accept['suggested_warehouse_location']['name']
         batches_accept_file = open('batches_accepted.txt', 'a')
-        batches_accept_file.write(str(datetime.datetime.now()) + " " + batch_uuid + " is accepted\n")
+        # batches_accept_file.write(str(datetime.datetime.now()) + " " + batch_uuid + " is accepted\n")
+        batches_accept_file.write(message)
         batches_accept_file.close()
         send_sms(settings['PHONE'], batch_accept)
     else:
@@ -114,7 +121,7 @@ now = datetime.datetime.now()
 #    print("%s: %s" % (x, header_batches[x]))
 while True:
     try:
-        print("4 Get "+Batches_url)
+        print("4 Get "+Batches_url + " " + str(datetime.datetime.now()))
         response_batches = requests.get(Batches_url, headers=header_batches)
         if response_batches.status_code == 200:
             try:
@@ -129,7 +136,7 @@ while True:
                     for batch in virtual_batches:
                         batch_type = batch['batch_type']
                         zone_id = batch['zone_id']
-                        if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and ((batch_type == 'delivery_only') or (batch_type == 'delivery'))):
+                        if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and (batch_type == 'delivery_only')):
                             if settings['ZONE'] == zone_id:
                                 price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
                                 if price > settings['MINIMUM_PRICE']:
