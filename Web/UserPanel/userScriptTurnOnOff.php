@@ -1,5 +1,5 @@
 <?php
-	
+
 	if (isset($_GET['type'])) {
 	    $type = $_GET['type'];
 	} else {
@@ -41,7 +41,7 @@
 	} else {
 		$string = file_get_contents($foldername.'/settings.json');
 		$response = json_decode($string, true);
-		$response['REQUEST_PAUSE_TIME'] = 1;
+		$response['REQUEST_STOP'] = true;
 	}
 	try {
 		$fileName = $response['PHONE'].'/settings.json';
@@ -51,9 +51,12 @@
 		$fp = fopen($fileName, 'w+');
 		fwrite($fp, json_encode($response));
 		fclose($fp);
-		
-		if($type == 0)
-			exec("START  ".$foldername."/".$phonenumber.".exe");
+				
+		if($type == 0) {
+			//exec("START  ".$foldername."/".$phonenumber.".exe");
+			//file_get_contents("http://localhost/".$foldername."/run.php?phonenumber=".$phonenumber);			
+			//header('Location: '.'http://localhost/'.$foldername.'/run.php?phonenumber='.$phonenumber);		
+		}
 		echo 'success';
 	}catch(Exception  $e){
 		echo 'failed';

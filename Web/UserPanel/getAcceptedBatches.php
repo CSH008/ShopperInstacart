@@ -9,7 +9,7 @@
 	$txtPath = "+1".$phone."/batches_accepted.txt";
 	if(file_exists($txtPath)){
       $content = file_get_contents($txtPath);
-      $arr = explode("\n", $content);
+      $arr = explode("\n", $content);           
       $cnt = count($arr);
       if($cnt>4) {
       	  $start = $cnt-4;
@@ -17,7 +17,7 @@
       	  $start = 0;
       }
       
-      for ($i = $start; $i < $cnt; $i++) {
+      for ($i = $start; $i < $cnt; $i++) {     	  
     	echo $arr[$i]."<br/>";
 	  }
     }
