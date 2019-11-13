@@ -1,4 +1,5 @@
 {
+        "Accept": "application/json",
         "Accept": "application/json;version=3",
         "x-client-identifier": "Android",
         "x-client-os": "android",
