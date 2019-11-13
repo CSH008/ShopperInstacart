@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2019 at 04:54 PM
+-- Generation Time: Nov 13, 2019 at 04:01 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -25,6 +25,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contactus`
+--
+
+CREATE TABLE `contactus` (
+  `id` int(11) NOT NULL,
+  `contact_email` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `contactus`
+--
+
+INSERT INTO `contactus` (`id`, `contact_email`) VALUES
+(1, 'vpcflex@gmail.com');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -36,17 +54,6 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `messages`
---
-
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL,
-  `message` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -86,6 +93,24 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `principles`
+--
+
+CREATE TABLE `principles` (
+  `id` int(11) NOT NULL,
+  `content` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `principles`
+--
+
+INSERT INTO `principles` (`id`, `content`) VALUES
+(1, 'Principles Content');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `stripe_option`
 --
 
@@ -120,14 +145,6 @@ CREATE TABLE `subscriptions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `subscriptions`
---
-
-INSERT INTO `subscriptions` (`id`, `userid`, `started_date`, `amount`, `currency`, `created_at`, `updated_at`) VALUES
-(4, 1, '2019-11-10 05:48:11', 1999, 'USD', '2019-11-10 05:48:11', '2019-11-10 05:48:11'),
-(5, 1, '2019-11-10 07:06:56', 1999, 'USD', '2019-11-10 07:06:56', '2019-11-10 07:06:56');
-
 -- --------------------------------------------------------
 
 --
@@ -155,25 +172,26 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `phonenumber`, `password`, `location`, `remember_token`, `is_running`, `active`, `subscription_expired`, `subscription_started_date`, `paid_amount`, `created_at`, `updated_at`) VALUES
-(1, 'Rabbit', '7868179221', '$2y$10$/31YWQ6dOCH676/KVvUzH.vIVY9jIpnpMH7R4QcMbatRAgIKt5V..', '', 'ol9sYQBJOaPEbotW2mz1drD9HIJPt8qYPlVdbvgdVCp7QEWM9gnCT5diucfr', 0, 1, 0, '2019-11-10 07:06:56', 3998, '2019-11-06 12:30:31', '2019-11-10 07:06:56'),
-(4, 'suju', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', '', NULL, 0, 1, 1, '0000-00-00 00:00:00', 0, '2019-11-05 17:56:07', '2019-11-10 07:52:30'),
-(5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', '', NULL, 0, 0, 1, '0000-00-00 00:00:00', 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54'),
-(9, 'test', '1234567890', '$2y$10$Q/5U62Ms6clFCSUr8Nnf0.a4mHy6wdXdLM2q9k6gAY7OinbmnkAkW', NULL, NULL, 0, 0, 1, NULL, 0, '2019-11-10 07:10:35', '2019-11-10 07:18:27');
+(1, 'Rabbit', '7868179221', '$2y$10$pASaH4ciDvJIT1haUpv4puTTfee3/SkKqA.WH4Gzx0k9SpW7oBZuO', '', 'sKom2xTHrrr4qscLXo5rzdMKAD8Kw2nKnWq5jxqmUYnRrLO1DiKHyPycQUTc', 0, 1, 0, '2019-11-09 16:00:00', 0, '2019-11-06 12:30:31', '2019-11-13 06:59:56'),
+(4, 'suju', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', '', NULL, 0, 1, 1, NULL, 0, '2019-11-05 17:56:07', '2019-11-10 07:52:30'),
+(5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', '', NULL, 0, 0, 1, NULL, 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54'),
+(9, 'test', '1234567890', '$2y$10$Q/5U62Ms6clFCSUr8Nnf0.a4mHy6wdXdLM2q9k6gAY7OinbmnkAkW', NULL, NULL, 0, 0, 1, NULL, 0, '2019-11-10 07:10:35', '2019-11-10 07:18:27'),
+(10, 'Rabbit', '4047236476', '$2y$10$jwk10cG67Q.S0sum69mxdujcTvuz4KGFGxBhjbxsVzhmrVboDcm6a', NULL, NULL, 0, 1, 1, NULL, 0, '2019-11-12 15:56:17', '2019-11-12 15:56:17');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `failed_jobs`
+-- Indexes for table `contactus`
 --
-ALTER TABLE `failed_jobs`
+ALTER TABLE `contactus`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `messages`
+-- Indexes for table `failed_jobs`
 --
-ALTER TABLE `messages`
+ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -187,6 +205,12 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `principles`
+--
+ALTER TABLE `principles`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `stripe_option`
@@ -212,22 +236,28 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `contactus`
+--
+ALTER TABLE `contactus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `principles`
+--
+ALTER TABLE `principles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `stripe_option`
@@ -245,7 +275,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
