@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import uuid
 from decimal import Decimal
@@ -20,7 +21,6 @@ settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
 header = json.load(open("header.json"))
 
-
 def login():
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
@@ -35,6 +35,8 @@ def login():
         ('username', settings['PHONE'])
     ]
     print("1. Post " + Token_url)
+    header['Accept'] = 'application/json'
+    header['X-Request-ID'] = str(uuid.uuid4())
     response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
@@ -100,13 +102,14 @@ def accept_batch(batch_uuid, batch_accept):
 
         now1 = datetime.datetime.now()
         my_date = datetime.datetime.strptime(str(now1.hour) + ":" + str(now1.minute), "%H:%M")
-        message = now1.strftime('%d/%m/%y') + " - " + my_date.strftime("%I:%M %p") + " - Batch paid for " + batch_accept['earnings']['estimate'] + \
-                  ",at " + batch_accept['warehouse']['name'] + " located in " + batch_accept['suggested_warehouse_location']['name']
+        msg = now1.strftime('%d/%m/%y') + " - " + my_date.strftime("%I:%M %p") + " - Batch paid for " + batch_accept['earnings']['estimate'] + ",at " + batch_accept['warehouse']['name'] + " located in " + batch_accept['suggested_warehouse_location']['name']
         batches_accept_file = open('batches_accepted.txt', 'a')
-        # batches_accept_file.write(str(datetime.datetime.now()) + " " + batch_uuid + " is accepted\n")
-        batches_accept_file.write(message)
+        batches_accept_file.write(msg)
         batches_accept_file.close()
-        send_sms(settings['PHONE'], batch_accept)
+        try:
+            send_sms(settings['PHONE'], batch_accept)
+        except:
+            print("send sms exception")
     else:
         print("%d: %s" % (response_accept.status_code, response_accept.reason))
 
@@ -121,6 +124,7 @@ now = datetime.datetime.now()
 #    print("%s: %s" % (x, header_batches[x]))
 while True:
     try:
+        settings = json.load(open("./settings.json"))
         print("4 Get "+Batches_url + " " + str(datetime.datetime.now()))
         response_batches = requests.get(Batches_url, headers=header_batches)
         if response_batches.status_code == 200:
@@ -130,9 +134,9 @@ while True:
                 if len(virtual_batches) > 0:
                     print('Batches Success!')
                     print(response_batches.text)
-                    batches_file = open('batches.txt', 'a')
-                    batches_file.write(str(datetime.datetime.now()) + " " + response_batches.text + "\n")
-                    batches_file.close()
+                    # batches_file = open('batches.txt', 'a')
+                    # batches_file.write(str(datetime.datetime.now()) + " " + response_batches.text + "\n")
+                    # batches_file.close()
                     for batch in virtual_batches:
                         batch_type = batch['batch_type']
                         zone_id = batch['zone_id']
