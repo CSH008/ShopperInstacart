@@ -157,6 +157,42 @@ def login():
     return expires
 
 
+def location():
+    header_batches['If-None-Match'] = 'W/"89379b3a31c4bf6089f457389eda8b06"'
+    response = requests.get(Needs_location_url, headers=header_batches)
+    if response.status_code == 200:
+        print('Needs location Success!')
+        print(response.text)
+    else:
+        print("%d: %s" % (response.status_code, response.reason))
+
+    # 3. Getting Location info
+
+    now_date = datetime.datetime.now()
+    sixteen_hours_from_now = now_date + datetime.timedelta(hours=16)
+    data_for_location = [
+        ('accuracy', 3.9),
+        ('direction', 0.0),
+        ('is_considered_mock', False),
+        ('is_mock', False),
+        ('latitude', settings['LOCATION_LATITUDE']),
+        ('longitude', settings['LOCATION_LONGITUDE']),
+        ('measured_at', str(now_date)),
+        ('speed', 0.0),
+        ('track_location_response', True),
+        ('true_measured_at', str(sixteen_hours_from_now))
+    ]
+
+    print("3 Post " + Location_url)
+    response = requests.post(Location_url, headers=header_batches, data=data_for_location)
+    if response.status_code == 200:
+        print('Location Success!')
+        print(response.text)
+        # response_json = json.loads(response.text)
+    else:
+        print("%d: %s" % (response.status_code, response.reason))
+
+
 def accept_batch(batch_uuid, batch_accept):
     print("5 Post " + Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true")
     response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches)
@@ -196,6 +232,7 @@ while True:
         settings = json.load(open("./settings.json"))
         # print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
         if flag:
+            # location()
             print("4 Get " + Batches_url)
             header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
             response_batches = requests.get(Batches_url, headers=header_batches)
@@ -234,8 +271,9 @@ while True:
         else:
             print("%d: %s" % (response_batches.status_code, response_batches.reason))
             # if someone login by apk, close script
-            # if response_batches.status_code == 401:
-            #     break
+            if response_batches.status_code == 401:
+                login()
+                continue
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
@@ -245,5 +283,8 @@ while True:
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
             login()
         time.sleep(settings['REQUEST_PAUSE_TIME'])
+
+        if difference_seconds > 3000:
+            login()
     except:
         login()
