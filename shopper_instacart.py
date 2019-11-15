@@ -203,7 +203,7 @@ while True:
             # print("4 Get " + Batches_json_url + " " + str(datetime.datetime.now()))
             # header_batches['If-None-Match'] = 'W/"e8053e2e8d58ca76d5961370db3a879d"'
             # response_batches = requests.get(Batches_json_url, headers=header_batches)
-            time.sleep(10)
+            time.sleep(0)
             i = 10
             continue
 
