@@ -14,12 +14,15 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 Token_url = 'https://shopper-api.instacart.com/oauth/token.json'
 RegisteringDevice_url = 'https://shopper-api.instacart.com/shopper_devices.json'
+Batches_json_url = 'https://shopper-api.instacart.com/driver/batches.json?filters%5Bactive%5D=true'
+Needs_location_url = 'https://locations-api.instacart.com/locations/needs_location.json'
 Location_url = 'https://locations-api.instacart.com/locations.json'
 Batches_url = 'https://shopper-api.instacart.com/driver/virtual_batches'
 
 settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
 header = json.load(open("header.json"))
+proxy_url = "http://172.16.0.154:3129"
 
 def login():
     expires = 0
@@ -35,9 +38,11 @@ def login():
         ('username', settings['PHONE'])
     ]
     print("1. Post " + Token_url)
-    header['Accept'] = 'application/json'
-    header['X-Request-ID'] = str(uuid.uuid4())
+    # header['Accept'] = 'application/json'
+    # header['X-Request-ID'] = str(uuid.uuid4())
+    # response = requests.post(Token_url, headers=header, data=data_for_token, proxies={"https": proxy_url})
     response = requests.post(Token_url, headers=header, data=data_for_token)
+    # response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
         print(response.text)
@@ -61,6 +66,65 @@ def login():
     response = requests.post(RegisteringDevice_url, headers=header_batches, data=data_for_register_device)
     if response.status_code == 200:
         print('Register Device Success!')
+        print(response.text)
+    else:
+        print("%d: %s" % (response.status_code, response.reason))
+
+    # # "https://shopper-api.instacart.com/me.json"
+    # response = requests.get("https://shopper-api.instacart.com/me.json", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('me.json Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+    # # "https://shopper-api.instacart.com/we"
+    # response = requests.get("https://shopper-api.instacart.com/we", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('we Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+    # # "https://shopper-api.instacart.com/driver/completed_orientations.json"
+    # response = requests.get("https://shopper-api.instacart.com/driver/completed_orientations.json", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('completed_orientations Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+    # # "https://shopper-api.instacart.com/driver/navigation_menu.json"
+    # response = requests.get("https://shopper-api.instacart.com/driver/navigation_menu.json", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('navigation_menu Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+    # # "https://shopper-api.instacart.com/communications.json"
+    # response = requests.get("https://shopper-api.instacart.com/communications.json", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('communications Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+    # # "https://shopper-api.instacart.com/driver/dashboard.json"
+    # response = requests.get("https://shopper-api.instacart.com/driver/dashboard.json", headers=header_batches)
+    # if response.status_code == 200:
+    #     print('dashboard Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
+
+    header_batches['If-None-Match'] = 'W/"e8053e2e8d58ca76d5961370db3a879d"'
+    response = requests.get(Batches_json_url, headers=header_batches)
+    if response.status_code == 200:
+        print('Batches json Success!')
+        print(response.text)
+    else:
+        print("%d: %s" % (response.status_code, response.reason))
+
+    header_batches['If-None-Match'] = 'W/"89379b3a31c4bf6089f457389eda8b06"'
+    response = requests.get(Needs_location_url, headers=header_batches)
+    if response.status_code == 200:
+        print('Needs location Success!')
         print(response.text)
     else:
         print("%d: %s" % (response.status_code, response.reason))
@@ -116,17 +180,33 @@ def accept_batch(batch_uuid, batch_accept):
 
 expires_in = login()
 expires_in = expires_in - 2000
-header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
+
 i = 0
+flag = True
 now = datetime.datetime.now()
 # print
 # for x in header_batches:
 #    print("%s: %s" % (x, header_batches[x]))
 while True:
     try:
+        i = i + 1
+        if i >= 10:
+            flag = not flag
+            i = 0
         settings = json.load(open("./settings.json"))
-        print("4 Get "+Batches_url + " " + str(datetime.datetime.now()))
-        response_batches = requests.get(Batches_url, headers=header_batches)
+        # print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
+        if flag:
+            print("4 Get " + Batches_url)
+            header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
+            response_batches = requests.get(Batches_url, headers=header_batches)
+        else:
+            # print("4 Get " + Batches_json_url + " " + str(datetime.datetime.now()))
+            # header_batches['If-None-Match'] = 'W/"e8053e2e8d58ca76d5961370db3a879d"'
+            # response_batches = requests.get(Batches_json_url, headers=header_batches)
+            time.sleep(10)
+            i = 10
+            continue
+
         if response_batches.status_code == 200:
             try:
                 response_json = json.loads(response_batches.text)
@@ -159,8 +239,8 @@ while True:
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
-        # if (settings['REQUEST_PAUSE_TIME'] != 0) and (settings['REQUEST_PAUSE_TIME'] < difference_seconds):
-        #     break
+        if (settings['REQUEST_STOP'] == True):
+             break
         # if token is expired, then relogin
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
             login()
