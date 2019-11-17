@@ -22,7 +22,13 @@ Batches_url = 'https://shopper-api.instacart.com/driver/virtual_batches'
 settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
 header = json.load(open("header.json"))
-proxy_url = "http://172.16.0.154:3129"
+proxies = {}
+if settings['USE_PRX'] == True:
+    proxies = {
+        'http': 'http://'+settings['USER_PRX']+':'+settings['PASSWORD_PRX']+'@'+settings['IP_PRX']+':'+settings['PORT_PRX'],
+        'https': 'http://'+settings['USER_PRX']+':'+settings['PASSWORD_PRX']+'@'+settings['IP_PRX']+':'+settings['PORT_PRX']
+    }
+
 
 def login():
     expires = 0
@@ -40,8 +46,8 @@ def login():
     print("1. Post " + Token_url)
     # header['Accept'] = 'application/json'
     # header['X-Request-ID'] = str(uuid.uuid4())
-    # response = requests.post(Token_url, headers=header, data=data_for_token, proxies={"https": proxy_url})
-    response = requests.post(Token_url, headers=header, data=data_for_token)
+    response = requests.post(Token_url, headers=header, data=data_for_token, proxies=proxies)
+    # response = requests.post(Token_url, headers=header, data=data_for_token)
     # response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
@@ -63,7 +69,7 @@ def login():
         ('device_type', 'android')
     ]
     print("2. Post "+RegisteringDevice_url)
-    response = requests.post(RegisteringDevice_url, headers=header_batches, data=data_for_register_device)
+    response = requests.post(RegisteringDevice_url, headers=header_batches, data=data_for_register_device, proxies=proxies)
     if response.status_code == 200:
         print('Register Device Success!')
         print(response.text)
@@ -71,42 +77,42 @@ def login():
         print("%d: %s" % (response.status_code, response.reason))
 
     # # "https://shopper-api.instacart.com/me.json"
-    # response = requests.get("https://shopper-api.instacart.com/me.json", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/me.json", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('me.json Success!')
     #     print(response.text)
     # else:
     #     print("%d: %s" % (response.status_code, response.reason))
     # # "https://shopper-api.instacart.com/we"
-    # response = requests.get("https://shopper-api.instacart.com/we", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/we", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('we Success!')
     #     print(response.text)
     # else:
     #     print("%d: %s" % (response.status_code, response.reason))
     # # "https://shopper-api.instacart.com/driver/completed_orientations.json"
-    # response = requests.get("https://shopper-api.instacart.com/driver/completed_orientations.json", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/driver/completed_orientations.json", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('completed_orientations Success!')
     #     print(response.text)
     # else:
     #     print("%d: %s" % (response.status_code, response.reason))
     # # "https://shopper-api.instacart.com/driver/navigation_menu.json"
-    # response = requests.get("https://shopper-api.instacart.com/driver/navigation_menu.json", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/driver/navigation_menu.json", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('navigation_menu Success!')
     #     print(response.text)
     # else:
     #     print("%d: %s" % (response.status_code, response.reason))
     # # "https://shopper-api.instacart.com/communications.json"
-    # response = requests.get("https://shopper-api.instacart.com/communications.json", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/communications.json", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('communications Success!')
     #     print(response.text)
     # else:
     #     print("%d: %s" % (response.status_code, response.reason))
     # # "https://shopper-api.instacart.com/driver/dashboard.json"
-    # response = requests.get("https://shopper-api.instacart.com/driver/dashboard.json", headers=header_batches)
+    # response = requests.get("https://shopper-api.instacart.com/driver/dashboard.json", headers=header_batches, proxies=proxies)
     # if response.status_code == 200:
     #     print('dashboard Success!')
     #     print(response.text)
@@ -114,7 +120,7 @@ def login():
     #     print("%d: %s" % (response.status_code, response.reason))
 
     header_batches['If-None-Match'] = 'W/"e8053e2e8d58ca76d5961370db3a879d"'
-    response = requests.get(Batches_json_url, headers=header_batches)
+    response = requests.get(Batches_json_url, headers=header_batches, proxies=proxies)
     if response.status_code == 200:
         print('Batches json Success!')
         print(response.text)
@@ -122,7 +128,7 @@ def login():
         print("%d: %s" % (response.status_code, response.reason))
 
     header_batches['If-None-Match'] = 'W/"89379b3a31c4bf6089f457389eda8b06"'
-    response = requests.get(Needs_location_url, headers=header_batches)
+    response = requests.get(Needs_location_url, headers=header_batches, proxies=proxies)
     if response.status_code == 200:
         print('Needs location Success!')
         print(response.text)
@@ -147,7 +153,7 @@ def login():
     ]
 
     print("3 Post "+Location_url)
-    response = requests.post(Location_url, headers=header_batches, data=data_for_location)
+    response = requests.post(Location_url, headers=header_batches, data=data_for_location, proxies=proxies)
     if response.status_code == 200:
         print('Location Success!')
         print(response.text)
@@ -159,7 +165,7 @@ def login():
 
 def location():
     header_batches['If-None-Match'] = 'W/"89379b3a31c4bf6089f457389eda8b06"'
-    response = requests.get(Needs_location_url, headers=header_batches)
+    response = requests.get(Needs_location_url, headers=header_batches, proxies=proxies)
     if response.status_code == 200:
         print('Needs location Success!')
         print(response.text)
@@ -184,7 +190,7 @@ def location():
     ]
 
     print("3 Post " + Location_url)
-    response = requests.post(Location_url, headers=header_batches, data=data_for_location)
+    response = requests.post(Location_url, headers=header_batches, data=data_for_location, proxies=proxies)
     if response.status_code == 200:
         print('Location Success!')
         print(response.text)
@@ -195,7 +201,7 @@ def location():
 
 def accept_batch(batch_uuid, batch_accept):
     print("5 Post " + Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true")
-    response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches)
+    response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches, proxies=proxies)
     if response_accept.status_code == 200:
         print('Batches Accept Success!')
         print(response_accept.text)
@@ -225,24 +231,10 @@ now = datetime.datetime.now()
 #    print("%s: %s" % (x, header_batches[x]))
 while True:
     try:
-        i = i + 1
-        if i >= 10:
-            flag = not flag
-            i = 0
         settings = json.load(open("./settings.json"))
-        # print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
-        if flag:
-            # location()
-            print("4 Get " + Batches_url)
-            header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
-            response_batches = requests.get(Batches_url, headers=header_batches)
-        else:
-            # print("4 Get " + Batches_json_url + " " + str(datetime.datetime.now()))
-            # header_batches['If-None-Match'] = 'W/"e8053e2e8d58ca76d5961370db3a879d"'
-            # response_batches = requests.get(Batches_json_url, headers=header_batches)
-            time.sleep(0)
-            i = 10
-            continue
+        print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
+        header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
+        response_batches = requests.get(Batches_url, headers=header_batches, proxies=proxies)
 
         if response_batches.status_code == 200:
             try:
@@ -271,13 +263,16 @@ while True:
         else:
             print("%d: %s" % (response_batches.status_code, response_batches.reason))
             # if someone login by apk, close script
-            if response_batches.status_code == 401:
-                login()
-                continue
+            if settings['AUTO_LOGIN'] == True:
+                if response_batches.status_code == 401:
+                    login()
+                    continue
+            else:
+                break
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
-        if (settings['REQUEST_STOP'] == True):
+        if settings['REQUEST_STOP'] == True:
              break
         # if token is expired, then relogin
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
