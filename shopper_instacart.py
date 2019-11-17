@@ -31,7 +31,6 @@ if settings['USE_PRX'] == True:
     print(requests.get("http://lumtest.com/myip.json", proxies=proxies).text)
 
 
-
 def login():
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
@@ -203,7 +202,7 @@ def location():
 
 def accept_batch(batch_uuid, batch_accept):
     print("5 Post " + Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true")
-    response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches, proxies=proxies)
+    response_accept = requests.post(Batches_url+"/"+batch_uuid+"/accept?batch_id_only=true", headers=header_batches)
     if response_accept.status_code == 200:
         print('Batches Accept Success!')
         print(response_accept.text)
