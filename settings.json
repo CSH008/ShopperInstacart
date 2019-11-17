@@ -12,5 +12,11 @@
     "DEVICE_TOKEN": "dEufrctRID8:APA91bHg3I73QPT42Xms1IpWGGANUflVeu8sPzCxoAhJ0Z5K28xVCKwQPrZ_gNWNP2RXXHKhZo7uxHdH0n8QXWzOkDQkBUlXkt-zia_jExlYcUC6F5bVGfLdFHLOATkIYcBKq5v0ovdu",
     "DELIVERY_ONLY": true,
     "ZONE": 183,
-    "REQUEST_STOP": false
+    "REQUEST_STOP": false,
+    "USER_PRX": "lum-customer-hl_be591ec2-zone-virginia_ash-ip-154.17.83.35",
+    "PASSWORD_PRX": "a0svajb27c5v",
+    "IP_PRX": "zproxy.lum-superproxy.io",
+    "PORT_PRX": "22225",
+    "USE_PRX": true,
+    "AUTO_LOGIN": true
 }
