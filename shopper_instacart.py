@@ -263,12 +263,12 @@ while True:
         else:
             print("%d: %s" % (response_batches.status_code, response_batches.reason))
             # if someone login by apk, close script
-            if settings['AUTO_LOGIN'] == True:
-                if response_batches.status_code == 401:
+            if response_batches.status_code == 401:
+                if settings['AUTO_LOGIN'] == True:
                     login()
                     continue
-            else:
-                break
+                else:
+                    break
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
