@@ -208,7 +208,7 @@ def accept_batch(batch_uuid, batch_accept):
 
         now1 = datetime.datetime.now()
         my_date = datetime.datetime.strptime(str(now1.hour) + ":" + str(now1.minute), "%H:%M")
-        msg = now1.strftime('%d/%m/%y') + " - " + my_date.strftime("%I:%M %p") + " - Batch paid for " + batch_accept['earnings']['estimate'] + ",at " + batch_accept['warehouse']['name'] + " located in " + batch_accept['suggested_warehouse_location']['name']
+        msg = now1.strftime('%d/%m/%y') + " - " + my_date.strftime("%I:%M %p") + " - Batch paid for " + batch_accept['earnings']['estimate'] + ",at " + batch_accept['warehouse']['name'] + " located in " + batch_accept['suggested_warehouse_location']['name'] + "\n"
         batches_accept_file = open('batches_accepted.txt', 'a')
         batches_accept_file.write(msg)
         batches_accept_file.close()
@@ -232,9 +232,11 @@ now = datetime.datetime.now()
 while True:
     try:
         settings = json.load(open("./settings.json"))
-        print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
+        # print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
+        print("4 Get " + Batches_url)
         header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
         response_batches = requests.get(Batches_url, headers=header_batches, proxies=proxies)
+        print(response_batches.elapsed.total_seconds())
 
         if response_batches.status_code == 200:
             try:
