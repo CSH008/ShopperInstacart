@@ -28,6 +28,8 @@ if settings['USE_PRX'] == True:
         'http': 'http://'+settings['USER_PRX']+':'+settings['PASSWORD_PRX']+'@'+settings['IP_PRX']+':'+settings['PORT_PRX'],
         'https': 'http://'+settings['USER_PRX']+':'+settings['PASSWORD_PRX']+'@'+settings['IP_PRX']+':'+settings['PORT_PRX']
     }
+    print(requests.get("http://lumtest.com/myip.json", proxies=proxies).text)
+
 
 
 def login():
