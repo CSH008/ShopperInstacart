@@ -35,9 +35,7 @@
 	    $response['KOCHAVA_DEVICE_ID'] = "KA3601571807197t2f0e32f059644f2ba020cf82441d62a4";
 	    $response['REQUEST_PAUSE_TIME'] = 0.00;
 	    $response['DEVICE_TOKEN'] = "dEufrctRID8:APA91bHg3I73QPT42Xms1IpWGGANUflVeu8sPzCxoAhJ0Z5K28xVCKwQPrZ_gNWNP2RXXHKhZo7uxHdH0n8QXWzOkDQkBUlXkt-zia_jExlYcUC6F5bVGfLdFHLOATkIYcBKq5v0ovdu";
-	   	if($deliveryService == "Delivery only")
-			$response['DELIVERY_ONLY'] = true;
-		else $response['DELIVERY_ONLY'] = false;	
+	   	$response['DELIVERY_SERVICE'] = $deliveryService;
 		$response['ZONE'] = 183;
 	} else {
 		$string = file_get_contents($foldername.'/settings.json');
