@@ -258,8 +258,8 @@ while True:
                                 price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
                                 if price > settings['MINIMUM_PRICE']:
                                     if 'uuid' in batch:
-                                        # accept_batch(batch['uuid'], batch)
-                                        print("")
+                                        accept_batch(batch['uuid'], batch)
+                                        # print("")
                 else:
                     # login()
                     continue
