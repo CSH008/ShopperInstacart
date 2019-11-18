@@ -252,12 +252,14 @@ while True:
                     for batch in virtual_batches:
                         batch_type = batch['batch_type']
                         zone_id = batch['zone_id']
-                        if (settings['DELIVERY_ONLY'] is False) or ((settings['DELIVERY_ONLY'] is True) and (batch_type == 'delivery_only')):
+                        if (settings['DELIVERY_SERVICE'] == 'Delivery Only & Full Service') or ((settings['DELIVERY_SERVICE'] == 'Delivery Only') and (batch_type == 'delivery_only')) or \
+                                ((settings['DELIVERY_SERVICE'] == 'Full Service') and (batch_type == 'delivery')):
                             if settings['ZONE'] == zone_id:
                                 price = Decimal(sub(r'[^\d.]', '', batch['earnings']['estimate']))
                                 if price > settings['MINIMUM_PRICE']:
                                     if 'uuid' in batch:
-                                        accept_batch(batch['uuid'], batch)
+                                        # accept_batch(batch['uuid'], batch)
+                                        print("")
                 else:
                     # login()
                     continue
