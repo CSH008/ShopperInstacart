@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2019 at 04:01 PM
+-- Generation Time: Nov 16, 2019 at 07:06 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -21,6 +21,30 @@ SET time_zone = "+00:00";
 --
 -- Database: `easyhour_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `phonenumber` varchar(50) NOT NULL,
+  `password` varchar(155) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `name`, `email`, `phonenumber`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Rabbit', '', '7868179221', '$2y$10$BUIpM/r.FHL6p8NDKCrIP.jlqLE0UZEiYgVf.Yw4zEEHFe103gAOm', NULL, '2019-11-16 08:49:12', '2019-11-16 07:54:58');
 
 -- --------------------------------------------------------
 
@@ -54,6 +78,28 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `sms_to_newuser` text NOT NULL,
+  `sms_to_allusers` text NOT NULL,
+  `email_to_allusers` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `sms_to_newuser`, `sms_to_allusers`, `email_to_allusers`, `created_at`, `updated_at`) VALUES
+(1, 'Welcome New User', 'Hi, All Users Ok', 'Hi, All Users Ok Ok', NULL, '2019-11-16 09:22:29');
 
 -- --------------------------------------------------------
 
@@ -98,15 +144,17 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `principles` (
   `id` int(11) NOT NULL,
-  `content` text NOT NULL
+  `content` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `principles`
 --
 
-INSERT INTO `principles` (`id`, `content`) VALUES
-(1, 'Principles Content');
+INSERT INTO `principles` (`id`, `content`, `created_at`, `updated_at`) VALUES
+(1, 'Dashboard Content  12345678999', NULL, '2019-11-16 08:51:10');
 
 -- --------------------------------------------------------
 
@@ -119,15 +167,17 @@ CREATE TABLE `stripe_option` (
   `stripe_pub_key` text NOT NULL,
   `stripe_secret_key` text NOT NULL,
   `amount` int(11) NOT NULL,
-  `currency` varchar(10) NOT NULL
+  `currency` varchar(10) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `stripe_option`
 --
 
-INSERT INTO `stripe_option` (`id`, `stripe_pub_key`, `stripe_secret_key`, `amount`, `currency`) VALUES
-(1, 'pk_live_KUq6p0AyXcWGPQHcXh4i6QLk', 'sk_live_Tpwv1DrXmx2gVJpSa2grD1Aa', 1999, 'USD');
+INSERT INTO `stripe_option` (`id`, `stripe_pub_key`, `stripe_secret_key`, `amount`, `currency`, `created_at`, `updated_at`) VALUES
+(1, 'pk_live_KUq6p0AyXcWGPQHcXh4i6QLk', 'sk_live_Tpwv1DrXmx2gVJpSa2grD1Aa', 1999, 'USD', NULL, '2019-11-16 09:49:35');
 
 -- --------------------------------------------------------
 
@@ -155,32 +205,41 @@ CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phonenumber` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
   `location` varchar(155) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ip_address` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_running` int(2) NOT NULL DEFAULT 0,
   `active` tinyint(1) NOT NULL DEFAULT 0,
   `subscription_expired` tinyint(1) NOT NULL DEFAULT 1,
   `subscription_started_date` timestamp NULL DEFAULT NULL,
   `paid_amount` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `admin_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `phonenumber`, `password`, `location`, `remember_token`, `is_running`, `active`, `subscription_expired`, `subscription_started_date`, `paid_amount`, `created_at`, `updated_at`) VALUES
-(1, 'Rabbit', '7868179221', '$2y$10$pASaH4ciDvJIT1haUpv4puTTfee3/SkKqA.WH4Gzx0k9SpW7oBZuO', '', 'sKom2xTHrrr4qscLXo5rzdMKAD8Kw2nKnWq5jxqmUYnRrLO1DiKHyPycQUTc', 0, 1, 0, '2019-11-09 16:00:00', 0, '2019-11-06 12:30:31', '2019-11-13 06:59:56'),
-(4, 'suju', '1554224820', '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', '', NULL, 0, 1, 1, NULL, 0, '2019-11-05 17:56:07', '2019-11-10 07:52:30'),
-(5, 'zch', '1504007648', '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', '', NULL, 0, 0, 1, NULL, 0, '2019-11-06 08:38:54', '2019-11-06 08:38:54'),
-(9, 'test', '1234567890', '$2y$10$Q/5U62Ms6clFCSUr8Nnf0.a4mHy6wdXdLM2q9k6gAY7OinbmnkAkW', NULL, NULL, 0, 0, 1, NULL, 0, '2019-11-10 07:10:35', '2019-11-10 07:18:27'),
-(10, 'Rabbit', '4047236476', '$2y$10$jwk10cG67Q.S0sum69mxdujcTvuz4KGFGxBhjbxsVzhmrVboDcm6a', NULL, NULL, 0, 1, 1, NULL, 0, '2019-11-12 15:56:17', '2019-11-12 15:56:17');
+INSERT INTO `users` (`id`, `name`, `phonenumber`, `email`, `password`, `location`, `remember_token`, `ip_address`, `is_running`, `active`, `subscription_expired`, `subscription_started_date`, `paid_amount`, `created_at`, `updated_at`, `admin_id`) VALUES
+(1, 'Rabbit', '7868179221', NULL, '$2y$10$pASaH4ciDvJIT1haUpv4puTTfee3/SkKqA.WH4Gzx0k9SpW7oBZuO', '', 'ZYk4Apxw2ie6nbgPuoGtqSNKT5BoEFCplRofg0eLlflxQgAdziWoVcp96qq6', '52.206.230.16 ', 0, 1, 0, '2019-11-09 16:00:00', 0, '2019-11-06 12:30:31', '2019-11-16 08:28:33', 0),
+(4, 'suju', '1554224820', NULL, '$2y$10$1q0/tfGSsMJl94Pey8EnGOarpwP1ze/ElksyXdgvcfKLR1vMMp1iC', '', NULL, '52.206.230.16 ', 0, 1, 1, NULL, 0, '2019-11-05 17:56:07', '2019-11-10 07:52:30', 0),
+(5, 'zch', '1504007648', NULL, '$2y$10$wLabZfY6cKcfSGJhQpMUvunvWXgnh3dciU5inLC6V6JwoFAmwmO1q', '', NULL, '52.206.230.16 ', 0, 0, 1, NULL, 0, '2019-11-06 08:38:54', '2019-11-15 23:53:48', 0),
+(10, 'Rabbit', '4047236476', NULL, '$2y$10$jwk10cG67Q.S0sum69mxdujcTvuz4KGFGxBhjbxsVzhmrVboDcm6a', NULL, NULL, '52.206.230.16 ', 0, 1, 1, NULL, 0, '2019-11-12 15:56:17', '2019-11-12 15:56:17', 0);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `phonenumber` (`phonenumber`);
 
 --
 -- Indexes for table `contactus`
@@ -192,6 +251,12 @@ ALTER TABLE `contactus`
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -236,6 +301,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `contactus`
 --
 ALTER TABLE `contactus`
@@ -246,6 +317,12 @@ ALTER TABLE `contactus`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -275,7 +352,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
