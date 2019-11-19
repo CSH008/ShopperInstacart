@@ -233,6 +233,8 @@ now = datetime.datetime.now()
 while True:
     try:
         settings = json.load(open("./settings.json"))
+        if settings['REQUEST_STOP'] == True:
+             break
         # print("4 Get " + Batches_url + " " + str(datetime.datetime.now()))
         print("4 Get " + Batches_url)
         header_batches['If-None-Match'] = 'W/"1d8f80f5473d4e400a8aaba4978839ca"'
@@ -260,9 +262,6 @@ while True:
                                     if 'uuid' in batch:
                                         accept_batch(batch['uuid'], batch)
                                         # print("")
-                else:
-                    # login()
-                    continue
             except:
                 print("no json")
         else:
@@ -277,13 +276,10 @@ while True:
 
         later = datetime.datetime.now()
         difference_seconds = (later - now).total_seconds()
-        if settings['REQUEST_STOP'] == True:
-             break
         # if token is expired, then relogin
         if (expires_in != 0) and (expires_in < difference_seconds*1000):
             login()
         time.sleep(settings['REQUEST_PAUSE_TIME'])
-
         if difference_seconds > 3000:
             login()
     except:
