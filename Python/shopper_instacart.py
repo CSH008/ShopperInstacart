@@ -4,7 +4,7 @@ import uuid
 from decimal import Decimal
 from re import sub
 
-from kochava import kochava_int
+from kochava import kochava_init
 from send_sms import *
 
 import requests
@@ -32,7 +32,7 @@ if settings['USE_PRX'] == True:
 
 
 def login():
-    kochava_int()
+    kochava_init()
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
     # 1. Auth login to get Token
@@ -49,7 +49,6 @@ def login():
     # header['Accept'] = 'application/json'
     header['X-Request-ID'] = str(uuid.uuid4())
     response = requests.post(Token_url, headers=header, data=data_for_token, proxies=proxies)
-    # response = requests.post(Token_url, headers=header, data=data_for_token)
     # response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
@@ -79,6 +78,7 @@ def login():
         print("%d: %s" % (response.status_code, response.reason))
 
     # "https://shopper-api.instacart.com/me.json"
+    header_batches['If-None-Match'] = 'W/"f6b7885ddaff43a9385db72518e23a6d"'
     response = requests.get("https://shopper-api.instacart.com/me.json", headers=header_batches, proxies=proxies)
     if response.status_code == 200:
         print('me.json Success!')
@@ -86,6 +86,7 @@ def login():
     else:
         print("%d: %s" % (response.status_code, response.reason))
     # "https://shopper-api.instacart.com/we"
+    header_batches['If-None-Match'] = 'W/"52f157b9bef05fbcd144c6760a763a54"'
     response = requests.get("https://shopper-api.instacart.com/we", headers=header_batches, proxies=proxies)
     if response.status_code == 200:
         print('we Success!')
