@@ -1,0 +1,22 @@
+{
+    "PHONE": "+17868569228",
+    "PASSWORD": "cb12345.",
+    "MINIMUM_PRICE": 12.0,
+    "LOCATION_LATITUDE": 25.65351,
+    "LOCATION_LONGITUDE": -80.36151,
+    "ACCESS_TOKEN": "ccb4aef8bf6620cb23c6516ae1381887c73f02e845600fb2e4476e7f502e62c6",
+    "CLIENT_ID": "2c34304d1ea8a8e56626e0ac8939eb486c08a9e40d0a113a95f76ec196097a47",
+    "CLIENT_SECRET": "c3e1d27a5682a614ce860fb3683cb9a6c8d7fe0e519fc1dbe2622aece2ca6658",
+    "KOCHAVA_DEVICE_ID": "KA3601572446239tf2b369de8daf4f7b9b8b6921be73ab60",
+    "REQUEST_PAUSE_TIME": 2.00,
+    "DEVICE_TOKEN": "dEufrctRID8:APA91bHg3I73QPT42Xms1IpWGGANUflVeu8sPzCxoAhJ0Z5K28xVCKwQPrZ_gNWNP2RXXHKhZo7uxHdH0n8QXWzOkDQkBUlXkt-zia_jExlYcUC6F5bVGfLdFHLOATkIYcBKq5v0ovdu",
+    "DELIVERY_SERVICE": "Delivery Only",
+    "ZONE": 183,
+    "REQUEST_STOP": false,
+    "USER_PRX": "lum-customer-hl_be591ec2-zone-virginia_ash-ip-154.17.83.35",
+    "PASSWORD_PRX": "a0svajb27c5v",
+    "IP_PRX": "zproxy.lum-superproxy.io",
+    "PORT_PRX": "22225",
+    "USE_PRX": false,
+    "AUTO_LOGIN": true
+}
