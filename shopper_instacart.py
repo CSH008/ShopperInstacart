@@ -46,7 +46,7 @@ def login():
     ]
     print("1. Post " + Token_url)
     # header['Accept'] = 'application/json'
-    # header['X-Request-ID'] = str(uuid.uuid4())
+    header['X-Request-ID'] = str(uuid.uuid4())
     response = requests.post(Token_url, headers=header, data=data_for_token, proxies=proxies)
     # response = requests.post(Token_url, headers=header, data=data_for_token)
     # response = requests.post(Token_url, headers=header, data=data_for_token)
