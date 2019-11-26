@@ -11,7 +11,7 @@ logs_logdna_url = "https://logs.logdna.com/logs/ingest"
 header_batches = json.load(open("header_batches.json"))
 
 
-def kochava_int():
+def kochava_init():
     now_date = datetime.datetime.now()
     header = {
         "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 5.1.1; SM-G955F Build/JLS36C)"
@@ -54,6 +54,7 @@ def kochava_int():
     else:
         print("%d: %s" % (response.status_code, response.reason))
 
+    header_batches['X-Request-ID'] = str(uuid.uuid4())
     header_batches['If-None-Match'] = 'W/"52f157b9bef05fbcd144c6760a763a54"'
     # "https://shopper-api.instacart.com/we"
     print("3. Get https://shopper-api.instacart.com/we")
@@ -157,6 +158,55 @@ def kochava_int():
     response = requests.post(track_json_url, headers=header, json=data)
     if response.status_code == 200:
         print('Track Json Success!')
+        print(response.text)
+    else:
+        print("%d: %s" % (response.status_code, response.reason))
+
+    header = {
+        "Authorization": "Basic YzFlZWI1MjllZmNiNjQ2NDc4Zjg1NWVjZjMwNTI0NmY=",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip",
+        "User-Agent": "okhttp/4.2.2"
+    }
+    data = \
+        {
+            "lines": [
+                {
+                    "app": "instashopper-android",
+                    "env": "Production",
+                    "timestamp": time.time() * 1000,
+                    "level": "debug",
+                    "meta": {
+                        "app_version": "4.156.5",
+                        "demo_mode": False,
+                        "tag": "ISApplication",
+                        "driver_id": 7356125,
+                        "impersonate_driver_id": "null"
+                    },
+                    "line": "--- onCreate"
+                },
+                {
+                    "app": "instashopper-android",
+                    "env": "Production",
+                    "timestamp": (time.time()+4) * 1000,
+                    "level": "debug",
+                    "meta": {
+                        "app_version": "4.156.5",
+                        "demo_mode": False,
+                        "tag": "ISSplashActivity",
+                        "driver_id": 7356125,
+                        "impersonate_driver_id": "null"
+                    },
+                    "line": "--- onCreate [ savedInstanceState: null] com.instacart.instashopper.v2.auth.ISSplashActivity @ 2328bb05,task id 3,[intent: {profile = 0}]"
+                }
+            ]
+        }
+
+    log_url = logs_logdna_url+"?hostname=driver-7356125&now="+str(time.time() * 1000)
+    print("5. Post " + log_url)
+    response = requests.post(log_url, headers=header, json=data)
+    if response.status_code == 200:
+        print('Logdna Success!')
         print(response.text)
     else:
         print("%d: %s" % (response.status_code, response.reason))

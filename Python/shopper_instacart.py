@@ -32,7 +32,7 @@ if settings['USE_PRX'] == True:
 
 
 def login():
-    kochava_init()
+    # kochava_init()
     expires = 0
     access_token = 'Basic QmFzaWMgTW1Nek5ETXdOR1F4WldFNFlUaGxOVFkyTWpabE1HRmpPRGt6T1dWaU5EZzJZekE0WVRsbE5EQmtNR0V4TVROaE9UVm1OelpsWXpFNU5qQTVOMkUwTnpwak0yVXhaREkzWVRVMk9ESmhOakUwWTJVNE5qQm1Zak0yT0ROallqbGhObU00WkRkbVpUQmxOVEU1Wm1NeFpHSmxNall5TW1GbFkyVXlZMkUyTmpVNA=='
     # 1. Auth login to get Token
@@ -48,8 +48,8 @@ def login():
     print("1. Post " + Token_url)
     # header['Accept'] = 'application/json'
     header['X-Request-ID'] = str(uuid.uuid4())
-    response = requests.post(Token_url, headers=header, data=data_for_token, proxies=proxies)
-    # response = requests.post(Token_url, headers=header, data=data_for_token)
+    # response = requests.post(Token_url, headers=header, data=data_for_token, proxies=proxies)
+    response = requests.post(Token_url, headers=header, data=data_for_token)
     if response.status_code == 200:
         print('Token Success!')
         print(response.text)
