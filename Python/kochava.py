@@ -8,6 +8,7 @@ track_kvinit_url = "https://kvinit-prod.api.kochava.com/track/kvinit"
 track_json_url = "https://control.kochava.com/track/json"
 logs_logdna_url = "https://logs.logdna.com/logs/ingest"
 
+settings = json.load(open("settings.json"))
 header_batches = json.load(open("header_batches.json"))
 
 
@@ -19,10 +20,10 @@ def kochava_init():
     data = {
         "action": "init",
         "kochava_app_id": "koshopper-android-ob4ml",
-        "kochava_device_id": "KA3601572446239tf2b369de8daf4f7b9b8b6921be73ab60",
+        "kochava_device_id": settings['KOCHAVA_DEVICE_ID'],
         "sdk_protocol": "12",
         "sdk_version": "AndroidTracker 3.6.0",
-        "nt_id": "67e14-26-58c9a58f-5cfa-4870-93f2-50337586e338",
+        "nt_id": settings['NT_ID'],
         "data": {
             "platform": "android",
             "package": "com.instacart.shopper",
@@ -66,95 +67,20 @@ def kochava_init():
         print("%d: %s" % (response.status_code, response.reason))
 
     print("4. Post " + track_json_url)
+    now_date = datetime.datetime.now()
     header = {
         "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 5.1.1; SM-G955F Build/JLS36C)"
     }
-    data = \
-        [
-            {
-                "action": "session",
-                "kochava_app_id": "koshopper-android-ob4ml",
-                "kochava_device_id": "KA3601572446239tf2b369de8daf4f7b9b8b6921be73ab60",
-                "sdk_protocol": "12",
-                "sdk_version": "AndroidTracker 3.6.0",
-                "nt_id": "67e14-26-9bca0140-7361-4c17-9f2d-70a362ba6497",
-                "data": {
-                    "screen_brightness": 0.4,
-                    "device_orientation": "portrait",
-                    "volume": 1,
-                    "carrier_name": "T-Mobile",
-                    "device": "SM-G955F-samsung",
-                    "disp_h": 960,
-                    "disp_w": 540,
-                    "app_version": "Shopper 415605",
-                    "app_short_string": "4.156.5-p",
-                    "os_version": "Android 5.1.1",
-                    "screen_dpi": 160,
-                    "manufacturer": "samsung",
-                    "product_name": "SM-G955F",
-                    "architecture": "i686",
-                    "battery_status": "charging",
-                    "battery_level": 80,
-                    "signal_bars": 0,
-                    "locale": "en-US",
-                    "timezone": "America\/Bogota",
-                    "ui_mode": "Normal",
-                    "notifications_enabled": True,
-                    "network_conn_type": "wifi",
-                    "ssid": "x8628e347a153323548",
-                    "bssid": "28:E3:47:A1:53:32",
-                    "network_metered": False,
-                    "usertime": int(time.time()),
-                    "uptime": 0,
-                    "state_active": True,
-                    "state": "resume"
-                },
-                "send_date": "2019-11-25T02:35:17.614Z"
-            },
-            {
-                "action": "event",
-                "kochava_app_id": "koshopper-android-ob4ml",
-                "kochava_device_id": "KA3601572446239tf2b369de8daf4f7b9b8b6921be73ab60",
-                "sdk_protocol": "12",
-                "sdk_version": "AndroidTracker 3.6.0",
-                "nt_id": "67e14-26-b1df433e-2568-4eab-84b0-a2892a2741e2",
-                "data": {
-                    "event_name": "app_launch",
-                    "event_data": {
-
-                    },
-                    "screen_brightness": 0.4,
-                    "device_orientation": "portrait",
-                    "volume": 1,
-                    "carrier_name": "T-Mobile",
-                    "device": "SM-G955F-samsung",
-                    "disp_h": 960,
-                    "disp_w": 540,
-                    "app_version": "Shopper 415605",
-                    "app_short_string": "4.156.5-p",
-                    "os_version": "Android 5.1.1",
-                    "screen_dpi": 160,
-                    "manufacturer": "samsung",
-                    "product_name": "SM-G955F",
-                    "architecture": "i686",
-                    "battery_status": "charging",
-                    "battery_level": 80,
-                    "signal_bars": 0,
-                    "locale": "en-US",
-                    "timezone": "America\/Bogota",
-                    "ui_mode": "Normal",
-                    "notifications_enabled": True,
-                    "network_conn_type": "wifi",
-                    "ssid": "x8628e347a153323548",
-                    "bssid": "28:E3:47:A1:53:32",
-                    "network_metered": False,
-                    "usertime": int(time.time()),
-                    "uptime": 4.326,
-                    "state_active": True
-                },
-                "send_date": str(now_date)
-            }
-        ]
+    data = json.load(open("kv_track.json"))
+    data[0]['kochava_device_id'] = settings['KOCHAVA_DEVICE_ID']
+    data[0]['nt_id'] = settings['NT_ID']
+    data[0]['data']['usertime'] = int(time.time())
+    data[0]['send_date'] = str(now_date)
+    now_date = datetime.datetime.now()
+    data[1]['kochava_device_id'] = settings['KOCHAVA_DEVICE_ID']
+    data[1]['nt_id'] = settings['NT_ID']
+    data[1]['data']['usertime'] = int(time.time() + 4)
+    data[1]['send_date'] = str(now_date)
     response = requests.post(track_json_url, headers=header, json=data)
     if response.status_code == 200:
         print('Track Json Success!')
@@ -162,51 +88,51 @@ def kochava_init():
     else:
         print("%d: %s" % (response.status_code, response.reason))
 
-    header = {
-        "Authorization": "Basic YzFlZWI1MjllZmNiNjQ2NDc4Zjg1NWVjZjMwNTI0NmY=",
-        "Connection": "Keep-Alive",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "okhttp/4.2.2"
-    }
-    data = \
-        {
-            "lines": [
-                {
-                    "app": "instashopper-android",
-                    "env": "Production",
-                    "timestamp": time.time() * 1000,
-                    "level": "debug",
-                    "meta": {
-                        "app_version": "4.156.5",
-                        "demo_mode": False,
-                        "tag": "ISApplication",
-                        "driver_id": 7356125,
-                        "impersonate_driver_id": "null"
-                    },
-                    "line": "--- onCreate"
-                },
-                {
-                    "app": "instashopper-android",
-                    "env": "Production",
-                    "timestamp": (time.time()+4) * 1000,
-                    "level": "debug",
-                    "meta": {
-                        "app_version": "4.156.5",
-                        "demo_mode": False,
-                        "tag": "ISSplashActivity",
-                        "driver_id": 7356125,
-                        "impersonate_driver_id": "null"
-                    },
-                    "line": "--- onCreate [ savedInstanceState: null] com.instacart.instashopper.v2.auth.ISSplashActivity @ 2328bb05,task id 3,[intent: {profile = 0}]"
-                }
-            ]
-        }
-
-    log_url = logs_logdna_url+"?hostname=driver-7356125&now="+str(time.time() * 1000)
-    print("5. Post " + log_url)
-    response = requests.post(log_url, headers=header, json=data)
-    if response.status_code == 200:
-        print('Logdna Success!')
-        print(response.text)
-    else:
-        print("%d: %s" % (response.status_code, response.reason))
+    # log_url = logs_logdna_url + "?hostname=driver-7356125&now=" + str(time.time() * 1000)
+    # print("5. Post " + log_url)
+    # header = {
+    #     "Authorization": "Basic YzFlZWI1MjllZmNiNjQ2NDc4Zjg1NWVjZjMwNTI0NmY=",
+    #     "Connection": "Keep-Alive",
+    #     "Accept-Encoding": "gzip",
+    #     "User-Agent": "okhttp/4.2.2"
+    # }
+    # data = \
+    #     {
+    #         "lines": [
+    #             {
+    #                 "app": "instashopper-android",
+    #                 "env": "Production",
+    #                 "timestamp": time.time() * 1000,
+    #                 "level": "debug",
+    #                 "meta": {
+    #                     "app_version": "4.156.5",
+    #                     "demo_mode": False,
+    #                     "tag": "ISApplication",
+    #                     "driver_id": 7356125,
+    #                     "impersonate_driver_id": "null"
+    #                 },
+    #                 "line": "--- onCreate"
+    #             },
+    #             {
+    #                 "app": "instashopper-android",
+    #                 "env": "Production",
+    #                 "timestamp": (time.time()+4) * 1000,
+    #                 "level": "debug",
+    #                 "meta": {
+    #                     "app_version": "4.156.5",
+    #                     "demo_mode": False,
+    #                     "tag": "ISSplashActivity",
+    #                     "driver_id": 7356125,
+    #                     "impersonate_driver_id": "null"
+    #                 },
+    #                 "line": "--- onCreate [ savedInstanceState: null] com.instacart.instashopper.v2.auth.ISSplashActivity @ 2328bb05,task id 3,[intent: {profile = 0}]"
+    #             }
+    #         ]
+    #     }
+    #
+    # response = requests.post(log_url, headers=header, json=data)
+    # if response.status_code == 200:
+    #     print('Logdna Success!')
+    #     print(response.text)
+    # else:
+    #     print("%d: %s" % (response.status_code, response.reason))
